@@ -1,0 +1,5 @@
+包除原理の|S|=0と|S|=|N|の時は場合分けが生じることを失念。 Tenka2013FinalD
+-1を配列に代入した Tenka2016EliminationA:D
+vector<bool>は遅くなるだけなのでok Tenka2016EliminationA:D
+考察が甘く、場合分けを見逃した。 CodeFestival2017B:D
+

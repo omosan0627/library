@@ -1,0 +1,24 @@
+low graphicsが怖い。→対処法いまいちわからず。とりあえず重い処理をしなければおｋ?
+ファイル容量の問題らしい。
+起動成功は黒画面になってからカーソルが現れた時
+私のgraphics boardはintelなのでinstall gdmをするとよさそう?
+sudo apt-get update and upgradeでも行ける臭い。
+low graphicsでたらctrl+alt+f1
+
+
+buildだがgvimはinstallしないのでgtk3とかの件は無視してok
+
+/etc/apt/sources.loadのdeb-srcを全部コメントアウトすればbuild-depはできるようになる。
+apt-get updateも忘れず。
+
+.isoはインストールの際いるだけ。ストレージじゃないです。
+
+pathがおかしくなったらhash -r
+
+kernel:X86_64=AMD64!!
+CPU:64bit
+
+file not foundはファイルがないのと、仕様が間違っているのがある。CPUとかね。
+
+tar.xzの解凍はtar- Jxvf xxxx.tar.xz
+
