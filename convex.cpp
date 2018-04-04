@@ -17,6 +17,7 @@ typedef unsigned long long ull;
 typedef pair<int, int> pi;
 typedef pair<ll, ll> pl;
 typedef pair<int, pi> ppi;
+typedef pair<double, double> pd;
 typedef vector<int> vi;
 typedef vector<ll> vl;
 typedef vector<vl> mat;
@@ -30,96 +31,61 @@ template<class S, class T>ostream& operator<<(ostream& out,const pair<S, T>& v){
 	out<<"("<<v.first<<", "<<v.second<<")";return out;}
 const int MAX_N = 200010;
 const int MAX_V = 100010;
-const double eps = 1e-6;
+const double eps = 1e-10;
 const ll mod = 1000000007;
 const int inf = 1 << 29;
 const ll linf = 1LL << 60;
 const double PI = 3.14159265358979323846;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-struct UF {
-	vector<int> par, ran;
-	void init(int n) {
-		par.resize(n); ran.resize(n);
-		for(int i = 0; i < n; i++) {
-			par[i] = i;
-			ran[i] = 0;
-		}
+struct P {
+	double x, y;
+	P() {}
+	P(double x, double y) : x(x), y(y) {
 	}
-	UF(int mx = 0) { init(mx); }
-
-	int find(int x) {
-		if(par[x] == x) return x;
-		else return par[x] = find(par[x]);
-	}
-	void unite(int x, int y) {
-		x = find(x);
-		y = find(y);
-		if(x == y) return;
-		if(ran[x] < ran[y]) {
-			par[x] = y;
-		}
-		else {
-			par[y] = x;
-			if(ran[x] == ran[y]) ran[x]++;
-		}
-	}
-	bool same(int x, int y) { return find(x) == find(y); }
-};
-
-
-struct mergeUF { //O((logn)^2)
-	int n;
-	vector<set<int>> g;
-	vector<int> gat;
-	void init(int mx) {
-		n = mx;
-		g.resize(n); gat.resize(n);
-		rep(i, 0, n) {
-			g[i].insert(i);
-			gat[i] = i;
-		}
-	}
-
-	mergeUF(int mx = 0) { init(mx); }
-
-	void unite(int x, int y) {
-		int a = gat[x], b = gat[y];
-		if(a == b) return;
-		if(sz(g[a]) > sz(g[b])) swap(a, b);
-
-		for(int s : g[a]) {
-			gat[s] = b;
-			g[b].insert(s);
-		}
-		g[a].clear();
-	}
-
-	bool same(int x, int y) { return gat[x] == gat[y]; }
-	void show() {
-		rep(i, 0, n) debug(i, vi(all(g[i])));
-		debug(gat);
+	P operator+(P p) { return P(x + p.x, y + p.y); }
+	P operator-(P p) { return P(x - p.x, y - p.y); }
+	double det(const P& p) { return x * p.y - y * p.x; }
+	bool operator<(const P& p) { return y != p.y ? y < p.y : x < p.x; }
+	friend ostream& operator<<(ostream& out, const P& p) {
+		out << "(" << p.x << ", " << p.y << ")"; return out;
 	}
 };
 
-//unite, same, find, init
-//don't forget to initialize it
-//////////////////////////////////////////////////////////////
 
+vector<P> convex_hull(vector<P>& ps) {
+	int n = sz(ps);
+	sort(all(ps));
+	int k = 0;
+	vector<P> qs(n * 2);
+	rep(i, 0, n) {
+		while(k > 1 && (qs[k - 1] - qs[k - 2]).det(ps[i] - qs[k - 1]) <= -eps) k--;
+		qs[k++] = ps[i];
+	}
+
+	for(int i = n - 2, t = k; i >= 0; i--) {
+		while(k > t && (qs[k - 1] - qs[k - 2]).det(ps[i] - qs[k - 1]) <= -eps) k--;
+		qs[k++] = ps[i];
+	}
+	qs.resize(k - 1);
+	return qs;
+}
+
+int N;
 
 void solve() {
-	int N = 5;
-	mergeUF u(N);
-	u.unite(0, 1); //unite node 0 and 1
-	u.show();
-	u.unite(2, 3);
-	u.show();
-	u.unite(2, 4); //unite node 2, 3, and 4
-	u.show();
-	cout << u.same(0, 1) << endl; //true
-	cout << u.same(2, 4) << endl; //true
-	cout << u.same(0, 2) << endl; //false
+	cin >> N;
+	vector<P> vec;
+	rep(i, 0, N) {
+		int a, b;
+		cin >> a >> b;
+		vec.pb(P(a, b));
+	}
+	auto ans = convex_hull(vec);
+	cout << sz(ans) << "\n";
+	rep(i, 0, sz(ans)) {
+		cout << (int)ans[i].x << " " << (int)ans[i].y << "\n";
+	}
 }
 
 int main() {
@@ -138,3 +104,4 @@ int main() {
 #endif
 	return 0;
 }
+

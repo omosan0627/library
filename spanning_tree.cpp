@@ -85,39 +85,35 @@ int prim() {
 //////////////
 //unionfind
 
-int par[MAX_N];
-int ran[MAX_N];
-
-void init(int n) {
-	for(int i = 0; i < n; i++) {
-		par[i] = i;
-		ran[i] = 0;
+struct UF {
+	vector<int> par, ran;
+	void init(int n) {
+		par.resize(n); ran.resize(n);
+		for(int i = 0; i < n; i++) {
+			par[i] = i;
+			ran[i] = 0;
+		}
 	}
-}
+	UF(int mx = 0) { init(mx); }
 
-int find(int x) {
-	if(par[x] == x) {
-		return x;
+	int find(int x) {
+		if(par[x] == x) return x;
+		else return par[x] = find(par[x]);
 	}
-	else return par[x] = find(par[x]);
-}
-
-void unite(int x, int y) {
-	x = find(x);
-	y = find(y);
-	if(x == y) return;
-	if(ran[x] < ran[y]) {
-		par[x] = y;
+	void unite(int x, int y) {
+		x = find(x);
+		y = find(y);
+		if(x == y) return;
+		if(ran[x] < ran[y]) {
+			par[x] = y;
+		}
+		else {
+			par[y] = x;
+			if(ran[x] == ran[y]) ran[x]++;
+		}
 	}
-	else {
-		par[y] = x;
-		if(ran[x] == ran[y]) ran[x]++;
-	}
-}
-
-bool same(int x, int y) {
-	return find(x) == find(y);
-}
+	bool same(int x, int y) { return find(x) == find(y); }
+};
 
 //////////////
 
@@ -133,12 +129,12 @@ edge es[100010];
 
 int kruskal() {
 	sort(es, es + E, comp);
-	init(N);//init union_find
+	UF uf(N);//init union_find
 	int res = 0;
 	for(int i = 0; i < E; i++) {
 		edge e = es[i];
-		if(!same(e.u, e.v)) {
-			unite(e.u, e.v);
+		if(!uf.same(e.u, e.v)) {
+			uf.unite(e.u, e.v);
 			res += e.cost;
 		}
 	}

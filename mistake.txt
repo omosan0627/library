@@ -2,4 +2,20 @@
 -1を配列に代入した Tenka2016EliminationA:D
 vector<bool>は遅くなるだけなのでok Tenka2016EliminationA:D
 考察が甘く、場合分けを見逃した。 CodeFestival2017B:D
+loop内の変数でオーバーフローした SRM639Easy
+配列を出力するときdebug(vl(all(vec)));にする。viじゃなくて。 ARC084E
+bfsはqueueが最短経路長で並んでいることがミソ。実装はdijkstraっぽく。ARC084D
+添字は一番わかりやすいものを Codefestival2017C:F
+点の数Nと辺の数Mを入れ替えない AGC002D
+実験に頼りすぎるのはNG AGC012D
+定理を使うときは式を正しく記述できているか良く確認 procon2018E
+初期化をミスらない(-1 or 0) AGC012E
+閉区間は要素に注目、開区間は仕切り
+interactiveはendlで出力
+平方分割は初期化でセグフォしないよう気をつける。特にCNTで初期化すると死ぬ可能性がある。
 
+
+コンテスト中
+いつもどおりを心がける
+サンプルは全部確認。
+見切り発車しない。

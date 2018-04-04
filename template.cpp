@@ -48,7 +48,9 @@ int main() {
 #endif
     cout << fixed;
 	cout.precision(20);
+	srand((unsigned int)time(NULL));
 #ifdef LOCAL
+	//freopen("in.txt", "wt", stdout); //for tester
     freopen("in.txt", "rt", stdin);
 #endif	
 	solve();

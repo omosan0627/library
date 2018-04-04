@@ -37,89 +37,86 @@ const ll linf = 1LL << 60;
 const double PI = 3.14159265358979323846;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-struct UF {
-	vector<int> par, ran;
-	void init(int n) {
-		par.resize(n); ran.resize(n);
-		for(int i = 0; i < n; i++) {
-			par[i] = i;
-			ran[i] = 0;
-		}
+struct slidemax {
+	ll que[MAX_N];
+	int s, e;
+	void init() {
+		s = 0; e = 0;
 	}
-	UF(int mx = 0) { init(mx); }
-
-	int find(int x) {
-		if(par[x] == x) return x;
-		else return par[x] = find(par[x]);
+	void add(ll x) {
+		while(s < e && que[e - 1] < x) e--;
+		que[e++] = x;
 	}
-	void unite(int x, int y) {
-		x = find(x);
-		y = find(y);
-		if(x == y) return;
-		if(ran[x] < ran[y]) {
-			par[x] = y;
-		}
-		else {
-			par[y] = x;
-			if(ran[x] == ran[y]) ran[x]++;
-		}
+	void remove(ll x) {
+		if(s < e && que[s] == x) s++;
 	}
-	bool same(int x, int y) { return find(x) == find(y); }
-};
-
-
-struct mergeUF { //O((logn)^2)
-	int n;
-	vector<set<int>> g;
-	vector<int> gat;
-	void init(int mx) {
-		n = mx;
-		g.resize(n); gat.resize(n);
-		rep(i, 0, n) {
-			g[i].insert(i);
-			gat[i] = i;
-		}
+	bool empty() {
+		return s == e;
 	}
-
-	mergeUF(int mx = 0) { init(mx); }
-
-	void unite(int x, int y) {
-		int a = gat[x], b = gat[y];
-		if(a == b) return;
-		if(sz(g[a]) > sz(g[b])) swap(a, b);
-
-		for(int s : g[a]) {
-			gat[s] = b;
-			g[b].insert(s);
-		}
-		g[a].clear();
+	ll get() {
+		if(s == e) return -linf;
+		else return que[s];
 	}
-
-	bool same(int x, int y) { return gat[x] == gat[y]; }
 	void show() {
-		rep(i, 0, n) debug(i, vi(all(g[i])));
-		debug(gat);
+		debug(vi(que + s, que + e));
 	}
 };
 
-//unite, same, find, init
-//don't forget to initialize it
-//////////////////////////////////////////////////////////////
+struct slidemin {
+	ll que[MAX_N];
+	int s, e;
+	void init() {
+		s = 0; e = 0;
+	}
+	void add(ll x) {
+		while(s < e && que[e - 1] > x) e--;
+		que[e++] = x;
+	}
+	void remove(ll x) {
+		if(s < e && que[s] == x) s++;
+	}
+	bool empty() {
+		return s == e;
+	}
+	ll get() {
+		if(s == e) return -linf;
+		else return que[s];
+	}
+	void show() {
+		debug(vi(que + s, que + e));
+	}
+};
 
+int N, X;
+int T[5010];
+ll dp[2][5010];
 
 void solve() {
-	int N = 5;
-	mergeUF u(N);
-	u.unite(0, 1); //unite node 0 and 1
-	u.show();
-	u.unite(2, 3);
-	u.show();
-	u.unite(2, 4); //unite node 2, 3, and 4
-	u.show();
-	cout << u.same(0, 1) << endl; //true
-	cout << u.same(2, 4) << endl; //true
-	cout << u.same(0, 2) << endl; //false
+	cin >> N >> X;
+	rep(i, 0, N) cin >> T[i];
+	rep(i, 0, N) dp[0][i] = X;
+	cout << X << "\n";
+	int now = 0, next = 1;
+	rep(k, 2, N + 1) {
+		ll ans = 0;
+		slidemax que;
+		que.init();
+		memset(dp[next], 0, sizeof(dp[next]));
+		int lv = -1;
+		rep(i, 0, N) {
+			while(lv + 1 < N && T[i] - T[lv + 1] > X) {
+				lv++;
+				que.remove(dp[now][lv] - T[lv]);
+			}
+			MAX(dp[next][i], que.get() + T[i]);
+			if(lv >= 0) MAX(dp[next][i], dp[now][lv] + X);
+			MAX(ans, dp[next][i]);
+
+			que.add(dp[now][i] - T[i]);
+		}
+		cout << ans << "\n";
+		swap(now, next);
+	}
 }
 
 int main() {
@@ -138,3 +135,5 @@ int main() {
 #endif
 	return 0;
 }
+
+

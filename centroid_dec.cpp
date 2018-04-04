@@ -85,7 +85,7 @@ namespace CD { //centroid decomposition
 
 	void update(int s, int n);
 
-	void solve_subproblem(int v) {
+	void solve_subproblem(int v) { //This is the most important part
 		compute_subtree_size(v, -1);
 		int s = search_centroid(v, -1, subtree_size[v]).sec;
 		centroid[s] = true;

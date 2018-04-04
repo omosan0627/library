@@ -37,7 +37,7 @@ const double PI = 3.14159265358979323846;
 
 namespace MF { //init before you use it. when you use double, be careful. O(|F||E|)
 
-	struct edge {int to, cap, rev; };
+	struct edge {int to; ll cap, rev; };
 
 	vector<edge> G[MAX_N];
 	bool used[MAX_N];
@@ -46,13 +46,13 @@ namespace MF { //init before you use it. when you use double, be careful. O(|F||
 		rep(i, 0, n) G[i].clear();
 	}
 
-	int add_edge(int from, int to, int cap) {
+	int add_edge(int from, int to, ll cap) {
 		G[from].push_back((edge){to, cap, (int)G[to].size()});
 		G[to].push_back((edge){from, 0, (int)G[from].size() - 1});
 		return (int)G[from].size() - 1;
 	}
 
-	int dfs(int v, int t, int f, bool change = true) { //if you just want to dfs, change = false
+	ll dfs(int v, int t, ll f, bool change = true) { //if you just want to dfs, change = false
 		if(v == t) return f;
 		used[v] = true;
 		for(int i = 0; i < (int)G[v].size(); i++) {

@@ -20,5 +20,7 @@ CPU:64bit
 
 file not foundはファイルがないのと、仕様が間違っているのがある。CPUとかね。
 
-tar.xzの解凍はtar- Jxvf xxxx.tar.xz
+tar.xzの解凍はtar -Jxvf xxxx.tar.xz
+
+
 

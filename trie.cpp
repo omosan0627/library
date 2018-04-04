@@ -37,89 +37,36 @@ const ll linf = 1LL << 60;
 const double PI = 3.14159265358979323846;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
+struct trie {
+	int G[MAX_N][26];
+	int A[100];
+	int M;
 
-struct UF {
-	vector<int> par, ran;
-	void init(int n) {
-		par.resize(n); ran.resize(n);
-		for(int i = 0; i < n; i++) {
-			par[i] = i;
-			ran[i] = 0;
-		}
+	trie() { init(); }
+	void init() {
+		memset(G, -1, sizeof(G));
+		M = 1;
 	}
-	UF(int mx = 0) { init(mx); }
 
-	int find(int x) {
-		if(par[x] == x) return x;
-		else return par[x] = find(par[x]);
-	}
-	void unite(int x, int y) {
-		x = find(x);
-		y = find(y);
-		if(x == y) return;
-		if(ran[x] < ran[y]) {
-			par[x] = y;
-		}
-		else {
-			par[y] = x;
-			if(ran[x] == ran[y]) ran[x]++;
-		}
-	}
-	bool same(int x, int y) { return find(x) == find(y); }
-};
-
-
-struct mergeUF { //O((logn)^2)
-	int n;
-	vector<set<int>> g;
-	vector<int> gat;
-	void init(int mx) {
-		n = mx;
-		g.resize(n); gat.resize(n);
+	void add(const string& str) {
+		int n = sz(str);
+		int v = 0;
 		rep(i, 0, n) {
-			g[i].insert(i);
-			gat[i] = i;
+			int y = str[i] - 'a';
+			if(G[v][y] == -1) {
+				G[v][y] = M++;
+			}
+			v = G[v][y];
 		}
 	}
-
-	mergeUF(int mx = 0) { init(mx); }
-
-	void unite(int x, int y) {
-		int a = gat[x], b = gat[y];
-		if(a == b) return;
-		if(sz(g[a]) > sz(g[b])) swap(a, b);
-
-		for(int s : g[a]) {
-			gat[s] = b;
-			g[b].insert(s);
-		}
-		g[a].clear();
-	}
-
-	bool same(int x, int y) { return gat[x] == gat[y]; }
 	void show() {
-		rep(i, 0, n) debug(i, vi(all(g[i])));
-		debug(gat);
+		rep(i, 0, 10) {
+			debug(i, G[i]);
+		}
 	}
 };
-
-//unite, same, find, init
-//don't forget to initialize it
-//////////////////////////////////////////////////////////////
-
 
 void solve() {
-	int N = 5;
-	mergeUF u(N);
-	u.unite(0, 1); //unite node 0 and 1
-	u.show();
-	u.unite(2, 3);
-	u.show();
-	u.unite(2, 4); //unite node 2, 3, and 4
-	u.show();
-	cout << u.same(0, 1) << endl; //true
-	cout << u.same(2, 4) << endl; //true
-	cout << u.same(0, 2) << endl; //false
 }
 
 int main() {
@@ -138,3 +85,4 @@ int main() {
 #endif
 	return 0;
 }
+
