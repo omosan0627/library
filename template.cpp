@@ -21,24 +21,34 @@ typedef vector<int> vi;
 typedef vector<ll> vl;
 typedef vector<vl> mat;
 typedef complex<double> comp;
-void Debug() {cout << '\n'; }
+void Debug() {cerr << '\n'; }
 template<class FIRST, class... REST>void Debug(FIRST arg, REST... rest){
-	cout<<arg<<" ";Debug(rest...);}
+	cerr<<arg<<" ";Debug(rest...);}
 template<class T>ostream& operator<<(ostream& out,const vector<T>& v) {
 	out<<"[";if(!v.empty()){rep(i,0,sz(v)-1)out<<v[i]<<", ";out<<v.back();}out<<"]";return out;}
 template<class S, class T>ostream& operator<<(ostream& out,const pair<S, T>& v){
 	out<<"("<<v.first<<", "<<v.second<<")";return out;}
-const int MAX_N = 200010;
+const int MAX_N = 500010;
 const int MAX_V = 100010;
 const double eps = 1e-6;
 const ll mod = 1000000007;
-const int inf = 1 << 29;
+const int inf = (1 << 30) - 1;
 const ll linf = 1LL << 60;
 const double PI = 3.14159265358979323846;
+mt19937 rng; //use it by rng() % mod, shuffle(all(vec), rng)
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-
 void solve() {
+}
+
+uint32_t rd() {
+	uint32_t res;
+#ifdef __MINGW32__
+	asm volatile("rdrand %0" :"=a"(res) ::"cc");
+#else
+	res = std::random_device()();
+#endif
+	return res;
 }
 
 int main() {
@@ -48,14 +58,15 @@ int main() {
 #endif
     cout << fixed;
 	cout.precision(20);
-	srand((unsigned int)time(NULL));
+    cerr << fixed;
+	cerr.precision(6);
+	rng.seed(rd());
 #ifdef LOCAL
 	//freopen("in.txt", "wt", stdout); //for tester
-    freopen("in.txt", "rt", stdin);
+	if(!freopen("in.txt", "rt", stdin)) return 1;
 #endif	
 	solve();
-#ifdef LOCAL
-    cerr << "Time elapsed: " << 1.0 * clock() / CLOCKS_PER_SEC << " s.\n";
-#endif
+    cerr << "Time: " << 1.0 * clock() / CLOCKS_PER_SEC << " s.\n";
 	return 0;
 }
+
