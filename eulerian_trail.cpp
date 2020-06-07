@@ -38,7 +38,7 @@ const double PI = 3.14159265358979323846;
 mt19937 rng; //use it by rng() % mod, shuffle(all(vec), rng)
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-int N;
+int N, M;
 int A[MAX_N], B[MAX_N];
 int deg[MAX_N];
 
@@ -68,6 +68,8 @@ int dfs(int v, vector<int> &trail, bool add_trail) {
 		}
 		res++;
 	}
+	//if you want vertices, not edges, then
+	// trail.pb(v);
 	return res;
 }
 
@@ -107,6 +109,8 @@ void solve() {
 	pow2 = 1; rep(i, 0, ok) pow2 *= 2;
 
 	rep(i, 0, pow2) g[i].clear();
+
+	//from library
 	rep(i, 0, N) {
 		int a = A[i] & (pow2 - 1);
 		int b = B[i] & (pow2 - 1);
