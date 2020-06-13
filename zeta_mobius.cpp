@@ -37,6 +37,7 @@ const ll linf = 1LL << 60;
 const double PI = 3.14159265358979323846;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
+/*
 vector<int> zeta(vector<int> f) { //get F(S)=Σ(T⊂S)G(T)
 	int n = sz(f);
 	for(int i = 0; (1 << i) < n; i++) {
@@ -44,7 +45,7 @@ vector<int> zeta(vector<int> f) { //get F(S)=Σ(T⊂S)G(T)
 	}
 	return f;
 }
-/*
+*/
 vector<int> zeta(vector<int> f) { //get F(S)=Σ(S⊂T)G(T)
 	int n = sz(f);
 	for(int i = 0; (1 << i) < n; i++) {
@@ -52,11 +53,20 @@ vector<int> zeta(vector<int> f) { //get F(S)=Σ(S⊂T)G(T)
 	}
 	return f;
 }
-*/
-vector<int> moebius(vector<int> f) { //inverse of the first zeta
+/*
+vector<int> moebius(vector<int> f) { //inverse of the first zeta, F(S) = Σ(S⊂T)|-1|^(T\S)G(T)
 	int n = sz(f);
 	for(int i = 0; (1 << i) < n; i++) {
 		rep(j, 0, n) if(j & (1 << i)) f[j] -= f[j ^ (1 << i)];
+	}
+	return f;
+}
+*/
+
+vector<int> moebius(vector<int> f) { //inverse of the second zeta, F(S) = Σ(T⊂S)|-1|^(S\T)G(T)
+	int n = sz(f);
+	for(int i = 0; (1 << i) < n; i++) {
+		rep(j, 0, n) if(!(j & (1 << i))) f[j] -= f[j | (1 << i)];
 	}
 	return f;
 }
@@ -86,12 +96,14 @@ void solve() {
 		}
 		cnt[bit] = 100 / a;
 	}
-	cnt[0] = 0;
+
 	debug(vi(cnt, cnt + (1 << N)));
 	vi vec = moebius(vi(cnt, cnt + (1 << N)));
 	vi vec2 = zeta(vec);
 	rep(bit, 0, (1 << N)) {
 		debug(bitset<4>(bit), vec[bit], vec2[bit]);
+		//bit, n, # of n which can be divided by f(bit) 
+		//	and f(bit) is the biggest among f(_)
 	}
 }
 
