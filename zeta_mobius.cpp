@@ -96,7 +96,7 @@ void solve() {
 	}
 
 	debug(vi(cnt, cnt + (1 << N)));
-	vi vec = upper_moebius(vi(cnt, cnt + (1 << N)));
+	vi vec = upper_mobius(vi(cnt, cnt + (1 << N)));
 	vi vec2 = upper_zeta(vec);
 	rep(bit, 0, (1 << N)) {
 		debug(bitset<4>(bit), vec[bit], vec2[bit]);
